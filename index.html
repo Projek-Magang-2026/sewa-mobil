@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Garasi 05 — Showroom Mobil Pilihan Jember &amp; Banyuwangi</title>
+  <title>Garasi 05</title>
   <meta name="description" content="Garasi 05, showroom mobil bekas berkualitas di Jember &amp; Banyuwangi. Kondisi bersih rapi, mesin sehat, surat lengkap taat pajak, cash dan kredit.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -76,34 +76,61 @@
       </div>
 
       <div class="showcase__stage">
+        <div class="showcase__cap" data-fade>
+          <span class="showcase__count"><b>01</b> / 03</span>
+          <span class="showcase__rule"></span>
+          <span>Eksterior &mdash; Toyota Fortuner GR</span>
+        </div>
         <div class="showcase__frame" data-mask>
           <div class="showcase__img" data-parallax="0.08" data-scale>
-            <img src="assets/img/featured-1.jpg" alt="Toyota Fortuner GR 2.8L Diesel Matic 2022" loading="lazy">
+            <video class="showcase__video" autoplay muted loop playsinline poster="assets/img/featured-1.jpg">
+              <source src="vid1.mp4" type="video/mp4">
+            </video>
           </div>
           <div class="showcase__shade"></div>
         </div>
 
-        <div class="showcase__spec showcase__spec--tl" data-fade>
-          <span>Mesin</span><strong>2.8L Diesel</strong>
+        <div class="showcase__aside">
+          <p class="showcase__aside-title" data-fade>Spesifikasi</p>
+          <dl class="showcase__specs">
+        <div class="showcase__spec" data-reveal>
+          <dt>Mesin</dt><dd>2.8L Diesel</dd>
         </div>
-        <div class="showcase__spec showcase__spec--tr" data-fade>
-          <span>Transmisi</span><strong>Matic &middot; 2022</strong>
+        <div class="showcase__spec" data-reveal>
+          <dt>Transmisi</dt><dd>Matic</dd>
         </div>
-        <div class="showcase__spec showcase__spec--bl" data-fade>
-          <span>Kilometer</span><strong>70 rb km</strong>
+        <div class="showcase__spec" data-reveal>
+          <dt>Tahun</dt><dd>2022</dd>
+        </div>
+        <div class="showcase__spec" data-reveal>
+          <dt>Kilometer</dt><dd>70 rb km</dd>
+        </div>
+        </dl>
         </div>
         <h3 class="showcase__name" data-hshift="-80">Fortuner GR</h3>
       </div>
 
       <div class="showcase__row">
-        <div class="showcase__thumb" data-mask>
+        <div class="showcase__thumb showcase__thumb--a" data-mask>
           <div class="showcase__img" data-parallax="0.06">
-            <img src="assets/img/featured-2.jpg" alt="Detail interior kabin Toyota Fortuner GR" loading="lazy">
+            <video class="showcase__video" autoplay muted loop playsinline poster="assets/img/featured-2.jpg">
+              <source src="vid2.mp4" type="video/mp4">
+            </video>
           </div>
+        </div>
+        <div class="showcase__cap showcase__cap--a" data-fade>
+          <span class="showcase__count"><b>02</b> / 03</span>
+          <span class="showcase__rule"></span>
+          <span>Interior Kabin</span>
         </div>
         <div class="showcase__text" data-fade>
           <p>Kabin bersih terawat, mesin diesel 2.8L sehat bertenaga, dan kaki-kaki senyap. Tersedia pembelian tunai maupun kredit dengan DP 75 juta.</p>
-          <a href="#koleksi" class="link-arrow">Lihat ready stock <i></i></a>
+          <a href="#koleksi" class="link-arrow">Lihat Detail Mobil <i></i></a>
+        </div>
+        <div class="showcase__cap showcase__cap--b" data-fade>
+          <span class="showcase__count"><b>03</b> / 03</span>
+          <span class="showcase__rule"></span>
+          <span>Tampak Belakang</span>
         </div>
         <div class="showcase__thumb showcase__thumb--b" data-mask>
           <div class="showcase__img" data-parallax="0.06">
@@ -115,25 +142,46 @@
 
     <!-- 3. READY STOCK COLLECTION -->
     <section class="collection" id="koleksi">
-      <header class="section-head section-head--row">
-        <div>
-          <p class="eyebrow">Ready Stock</p>
-          <h2 class="display" data-split>Tersedia sekarang.</h2>
-        </div>
-        <div class="filters-wrap">
-          <div class="filters" role="tablist" aria-label="Filter kategori kendaraan">
-            <button type="button" class="filter is-active" data-filter="all">Semua (13)</button>
-            <button type="button" class="filter" data-filter="suv">SUV (3)</button>
-            <button type="button" class="filter" data-filter="mpv">MPV (6)</button>
-            <button type="button" class="filter" data-filter="hatchback">Hatchback (4)</button>
-          </div>
-          <div class="filters filters--sub" role="tablist" aria-label="Filter transmisi">
-            <button type="button" class="filter-sub is-active" data-trans="all">Semua Transmisi</button>
-            <button type="button" class="filter-sub" data-trans="matic">Matic</button>
-            <button type="button" class="filter-sub" data-trans="manual">Manual</button>
+      <div class="kat-hero">
+        <p class="eyebrow">Koleksi Kendaraan</p>
+        <div class="kat-hero__grid">
+          <h2 class="display" data-split>Temukan kendaraan<br>pilihan Anda.</h2>
+          <div class="kat-hero__side" data-fade>
+            <p>Setiap unit kami seleksi satu per satu: kondisi terawat, surat lengkap, dan siap pakai. Jelajahi koleksi ready stock Garasi 05 di Jember dan Banyuwangi.</p>
+            <span class="kat-hero__no">Katalog &mdash; <b id="heroCount">13</b> unit</span>
           </div>
         </div>
-      </header>
+      </div>
+
+      <!-- SEARCH & FILTER -->
+      <div class="kat-filter" aria-label="Pencarian dan filter kendaraan">
+        <div class="kat-search">
+          <label for="fSearch">Cari</label>
+          <input type="search" id="fSearch" placeholder="Nama atau merek" autocomplete="off">
+        </div>
+        <div class="kat-filter__row">
+          <div class="kat-field"><label for="fBrand">Merek</label>
+            <select id="fBrand"><option value="all">Semua merek</option></select></div>
+          <div class="kat-field"><label for="fPrice">Rentang harga</label>
+            <select id="fPrice"><option value="all">Semua harga</option></select></div>
+          <div class="kat-field"><label for="fYear">Tahun</label>
+            <select id="fYear"><option value="all">Semua tahun</option></select></div>
+          <div class="kat-field"><label for="fTrans">Transmisi</label>
+            <select id="fTrans">
+              <option value="all">Semua transmisi</option>
+              <option value="matic">Matic</option>
+              <option value="manual">Manual</option>
+            </select></div>
+          <div class="kat-field"><label for="fType">Kategori</label>
+            <select id="fType">
+              <option value="all">Semua kategori</option>
+              <option value="suv">SUV</option>
+              <option value="mpv">MPV</option>
+              <option value="hatchback">Hatchback</option>
+            </select></div>
+          <button type="button" class="link-arrow" id="fReset">Reset filter <i></i></button>
+        </div>
+      </div>
 
       <div class="stock-grid" id="stockGrid">
         <!-- Diisi dari js/main.js dengan 13 unit Ready Stock -->
@@ -184,15 +232,41 @@
 
     <!-- 6. FINAL CTA -->
     <section class="cta" id="kontak">
-      <div class="cta__media" data-parallax="0.1">
+      <div class="cta__media" data-parallax="0.08">
         <img src="assets/img/cta.jpg" alt="Honda CR-V Prestige Turbo Garasi 05" loading="lazy">
         <div class="cta__shade"></div>
       </div>
-      <div class="cta__content">
-        <h2 class="display display--light" data-split>Temukan mobil<br>yang tepat untuk Anda.</h2>
-        <div class="cta__actions" data-fade>
-          <a href="https://wa.me/6281234567890?text=Halo%20Garasi%2005%2C%20saya%20ingin%20tanya%20unit%20yang%20ready." target="_blank" rel="noopener" class="btn btn--solid">WhatsApp</a>
-          <a href="tel:+6281234567890" class="btn btn--line">Telepon Kami</a>
+
+      <div class="cta__inner">
+        <div class="cta__top" data-fade>
+          <p class="eyebrow eyebrow--champagne">Hubungi Kami</p>
+          <span class="cta__index">Garasi 05 &middot; Showroom</span>
+        </div>
+
+        <div class="cta__grid">
+          <div class="cta__headline">
+            <h2 class="display display--light" data-split>Temukan mobil<br><em>yang tepat</em> untuk Anda.</h2>
+          </div>
+
+          <div class="cta__panel" data-fade>
+            <p class="cta__lead">Tim kami siap membantu memilih unit ready stock, simulasi kredit transparan, hingga tukar tambah langsung di showroom.</p>
+            <div class="cta__actions">
+              <a href="https://wa.me/6281234567890?text=Halo%20Garasi%2005%2C%20saya%20ingin%20tanya%20unit%20yang%20ready." target="_blank" rel="noopener" class="btn-champagne">
+                <span>Konsultasi via WhatsApp</span>
+                <svg class="cta__arrow" viewBox="0 0 24 12" fill="none" aria-hidden="true"><path d="M0 6h22m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>
+              </a>
+              <a href="tel:+6281234567890" class="cta__link">
+                <span>Atau telepon kami</span>
+                <svg class="cta__arrow" viewBox="0 0 24 12" fill="none" aria-hidden="true"><path d="M0 6h22m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="cta__meta" data-fade>
+          <span class="cta__no">06 &mdash; Konsultasi</span>
+          <span>Jember &middot; Banyuwangi</span>
+          <span>Cash &middot; Kredit &middot; Tukar Tambah</span>
         </div>
       </div>
     </section>
@@ -200,9 +274,42 @@
 
   <footer class="footer">
     <div class="footer__top">
-      <a href="#top" class="nav__logo">GARASI<span>05</span></a>
-      <address>Garasi 05 Jember &ndash; Banyuwangi<br>Jawa Timur, Indonesia</address>
-      <p>IG &amp; TikTok @garasi.05<br>Facebook Garasi NolLima</p>
+      <div>
+        <a href="#top" class="nav__logo">GARASI<span>05</span></a>
+        <p class="footer__tagline">Showroom Mobil Pilihan &bull; Jember &amp; Banyuwangi</p>
+      </div>
+      <address>
+        <strong>Lokasi Showroom:</strong><br>
+        Garasi 05 Jember &ndash; Banyuwangi<br>
+        Jawa Timur, Indonesia
+      </address>
+      <div class="footer__channels">
+        <strong>Kanal Resmi:</strong>
+        <div class="footer__social-icons">
+          <a href="https://instagram.com/garasi.05" target="_blank" rel="noopener" aria-label="Instagram @garasi.05" title="Instagram @garasi.05">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </a>
+          <a href="https://tiktok.com/@garasi.05" target="_blank" rel="noopener" aria-label="TikTok @garasi.05" title="TikTok @garasi.05">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.298-.002.595.042.88.13V9.4a6.33 6.33 0 0 0-.88-.06A6.34 6.34 0 0 0 3.14 15.7a6.34 6.34 0 0 0 10.74 4.54 6.27 6.27 0 0 0 1.95-4.54V8.71a8.21 8.21 0 0 0 4.76 1.48V6.74c-.337-.007-.674-.024-1-.05z"/>
+            </svg>
+          </a>
+          <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook Garasi NolLima" title="Facebook Garasi NolLima">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H7.5v-3H10V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3.15l-.5 3H13v6.8c4.56-.93 8-4.96 8-9.8z"/>
+            </svg>
+          </a>
+          <a href="https://wa.me/6281234567890" target="_blank" rel="noopener" aria-label="WhatsApp Resmi" title="WhatsApp Resmi +62 812-3456-7890">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
     </div>
     <div class="footer__bottom"><span>&copy; 2026 Garasi 05</span><a href="#top">Kembali ke atas &uarr;</a></div>
   </footer>
@@ -223,6 +330,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="js/data.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

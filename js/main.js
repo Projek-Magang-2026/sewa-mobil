@@ -3,64 +3,155 @@
 
   var WA_NUMBER = '6281234567890';
 
-  var STOCK = [
-    { name: 'Toyota Fortuner GR 2.8L', type: 'suv', trans: 'matic', meta: 'SUV · Matic · 2022', km: 'KM 70 rb', price: "400 Juta'an Up", dp: 'DP 75 jt · Angs 11,1 jt x 5th', tag: 'Flagship SUV', img: 'assets/img/stock/fortuner-gr-2022.jpg' },
-    { name: 'Innova Zenix Q Hybrid', type: 'mpv', trans: 'matic', meta: 'MPV · Matic · 2023', km: 'KM 41 rb', price: "400 Juta'an Up", dp: 'DP 40 jt · Angs 12,9 jt x 5th', tag: 'Modelista Hybrid', img: 'assets/img/stock/innova-zenix-q-2023.jpg' },
-    { name: 'Honda CR-V Prestige Turbo', type: 'suv', trans: 'matic', meta: 'SUV · Matic · 2022', km: 'KM 30 rb', price: "400 Juta'an Up", dp: 'DP 100 jt · Angs 9,3 jt x 5th', tag: 'Turbo Sensing', img: 'assets/img/stock/crv-prestige-2022.jpg' },
-    { name: 'Xpander Cross Premium', type: 'suv', trans: 'matic', meta: 'SUV · Matic · 2024', km: 'KM 21 rb', price: "300 Juta'an Up", dp: 'DP 65 jt · Angs 6,9 jt x 5th', tag: 'Matic 2024', img: 'assets/img/stock/xpander-cross-2024.jpg' },
-    { name: 'Toyota Innova G 2.4L Diesel', type: 'mpv', trans: 'matic', meta: 'MPV · Matic · 2023', km: 'KM 40 rb', price: "300 Juta'an Up", dp: 'DP 47 jt · Angs 9,3 jt x 5th', tag: 'Diesel Matic', img: 'assets/img/stock/innova-g-diesel-2023.jpg' },
-    { name: 'All New Avanza E 1.3L (I)', type: 'mpv', trans: 'matic', meta: 'MPV · Matic · 2023', km: 'KM 60 rb', price: "100 Juta'an Up", dp: 'DP 7 jt · Angs 5,4 jt x 5th', tag: 'DP 7 Jt', img: 'assets/img/stock/avanza-e-2023-1.jpg' },
-    { name: 'All New Avanza E 1.3L (II)', type: 'mpv', trans: 'matic', meta: 'MPV · Matic · 2023', km: 'KM 41 rb', price: "100 Juta'an Up", dp: 'DP 7 jt · Angs 5,4 jt x 5th', tag: 'DP 7 Jt', img: 'assets/img/stock/avanza-e-2023-2.jpg' },
-    { name: 'All New Xenia X 1.3L', type: 'mpv', trans: 'manual', meta: 'MPV · Manual · 2022', km: 'KM 90 rb', price: "100 Juta'an Up", dp: 'DP 20 jt · Angs 4,5 jt x 5th', tag: 'Manual 2022', img: 'assets/img/stock/xenia-x-2022.jpg' },
-    { name: 'All New Honda Brio E', type: 'hatchback', trans: 'manual', meta: 'Hatchback · Manual · 2023', km: 'KM 45 rb', price: "100 Juta'an Up", dp: 'DP 45 jt · Angs 3,6 jt x 5th', tag: 'Manual 2023', img: 'assets/img/stock/brio-e-2023.jpg' },
-    { name: 'Honda Brio E 1.2L Merah', type: 'hatchback', trans: 'manual', meta: 'Hatchback · Manual · 2018', km: 'KM 60 rb', price: "100 Juta'an Up", dp: 'DP 5 jt · Angs 3,6 jt x 5th', tag: 'DP 5 Jt', img: 'assets/img/stock/brio-e-2018-merah.jpg' },
-    { name: 'Honda Brio E 1.2L Putih', type: 'hatchback', trans: 'manual', meta: 'Hatchback · Manual · 2018', km: 'KM 100 rb', price: "100 Juta'an Up", dp: 'DP 5 jt · Angs 3,6 jt x 5th', tag: 'DP 5 Jt', img: 'assets/img/stock/brio-e-2018-putih.jpg' },
-    { name: 'Suzuki Ertiga GX 1.4L', type: 'mpv', trans: 'manual', meta: 'MPV · Manual · 2014', km: 'KM 160 rb', price: "100 Juta'an Up", dp: 'DP 35 jt · Angs 3,2 jt x 4th', tag: 'Ertiga GX', img: 'assets/img/stock/ertiga-gx-2014.jpg' },
-    { name: 'Toyota Agya G 1.0L', type: 'hatchback', trans: 'manual', meta: 'Hatchback · Manual · 2014', km: 'KM 100 rb', price: "90 Juta'an Up", dp: 'DP 35 jt · Angs 2,1 jt x 4th', tag: 'DP 35 Jt', img: 'assets/img/stock/agya-g-2014.jpg' }
-  ];
+  var STOCK = window.GARASI_STOCK || [];
 
   function waUrl(title) {
     return 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent('Halo Garasi 05, saya tertarik dengan ' + title);
   }
 
-  // ---------- Render Ready Stock ----------
+  // ---------- Render Ready Stock & Filter Lengkap ----------
   var stockGrid = document.getElementById('stockGrid');
-  var stockTriggers = [];
-  var currentCat = 'all';
-  var currentTrans = 'all';
+  var fSearch = document.getElementById('fSearch');
+  var fBrand = document.getElementById('fBrand');
+  var fPrice = document.getElementById('fPrice');
+  var fYear = document.getElementById('fYear');
+  var fTrans = document.getElementById('fTrans');
+  var fType = document.getElementById('fType');
+  var fReset = document.getElementById('fReset');
+  var heroCount = document.getElementById('heroCount');
+
+  var BRANDS = ['Toyota', 'Honda', 'Suzuki', 'Daihatsu', 'Mitsubishi'];
+  var MODEL_BRAND = {
+    fortuner: 'Toyota', innova: 'Toyota', avanza: 'Toyota', agya: 'Toyota',
+    xenia: 'Daihatsu', brio: 'Honda', 'cr-v': 'Honda',
+    xpander: 'Mitsubishi', ertiga: 'Suzuki'
+  };
+  var PRICE_RANGES = [
+    { v: 'le100', label: 'Hingga 100 juta', test: function (n) { return n <= 100; } },
+    { v: '101-300', label: '100 - 300 juta', test: function (n) { return n > 100 && n <= 300; } },
+    { v: 'gt300', label: 'Di atas 300 juta', test: function (n) { return n > 300; } }
+  ];
+
+  function brandOf(name) {
+    var low = name.toLowerCase(), i, k;
+    for (i = 0; i < BRANDS.length; i++) if (low.indexOf(BRANDS[i].toLowerCase()) === 0) return BRANDS[i];
+    for (k in MODEL_BRAND) if (low.indexOf(k) !== -1) return MODEL_BRAND[k];
+    return 'Lainnya';
+  }
+
+  function yearOf(meta) {
+    var m = (meta || '').match(/\b(19\d\d|20\d\d)\b/);
+    return m ? parseInt(m[1], 10) : 0;
+  }
+
+  function approxPriceOf(p) {
+    var m = (p || '').match(/(\d+)/);
+    return m ? parseInt(m[1], 10) : 0;
+  }
+
+  // Isi dropdown filter
+  if (fBrand) {
+    BRANDS.forEach(function (b) {
+      var opt = document.createElement('option');
+      opt.value = b;
+      opt.textContent = b;
+      fBrand.appendChild(opt);
+    });
+  }
+  if (fPrice) {
+    PRICE_RANGES.forEach(function (r) {
+      var opt = document.createElement('option');
+      opt.value = r.v;
+      opt.textContent = r.label;
+      fPrice.appendChild(opt);
+    });
+  }
+  if (fYear) {
+    var years = [];
+    STOCK.forEach(function (c) {
+      var y = yearOf(c.meta);
+      if (y && years.indexOf(y) === -1) years.push(y);
+    });
+    years.sort(function (a, b) { return b - a; });
+    years.forEach(function (y) {
+      var opt = document.createElement('option');
+      opt.value = String(y);
+      opt.textContent = String(y);
+      fYear.appendChild(opt);
+    });
+  }
 
   function renderStock() {
     if (!stockGrid) return;
+
+    var q = (fSearch ? fSearch.value : '').trim().toLowerCase();
+    var selBrand = fBrand ? fBrand.value : 'all';
+    var selPrice = fPrice ? fPrice.value : 'all';
+    var selYear = fYear ? fYear.value : 'all';
+    var selTrans = fTrans ? fTrans.value : 'all';
+    var selType = fType ? fType.value : 'all';
+
     var items = STOCK.filter(function (c) {
-      var matchCat = currentCat === 'all' || c.type === currentCat;
-      var matchTrans = currentTrans === 'all' || c.trans === currentTrans;
-      return matchCat && matchTrans;
+      if (q) {
+        var hay = (c.name + ' ' + (c.meta || '') + ' ' + brandOf(c.name)).toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      if (selBrand !== 'all' && brandOf(c.name) !== selBrand) return false;
+      if (selType !== 'all' && c.type !== selType) return false;
+      if (selTrans !== 'all' && c.trans !== selTrans) return false;
+      if (selYear !== 'all' && String(yearOf(c.meta)) !== selYear) return false;
+      if (selPrice !== 'all') {
+        var num = approxPriceOf(c.price);
+        var rule = null;
+        for (var i = 0; i < PRICE_RANGES.length; i++) {
+          if (PRICE_RANGES[i].v === selPrice) { rule = PRICE_RANGES[i]; break; }
+        }
+        if (rule && !rule.test(num)) return false;
+      }
+      return true;
     });
 
+    if (heroCount) heroCount.textContent = items.length;
+
     if (items.length === 0) {
-      stockGrid.innerHTML = '<p class="stock-empty">Tidak ada unit yang sesuai dengan kombinasi filter tersebut.</p>';
+      stockGrid.innerHTML = '<p class="stock-empty">Tidak ada unit yang sesuai dengan kombinasi pencarian dan filter tersebut.</p>';
       return;
     }
 
     stockGrid.innerHTML = items.map(function (c) {
+      var kredit = c.dp.replace(' · ', ' / ');
       return (
         '<article class="car">' +
           '<button type="button" class="car__media js-lb" data-src="' + c.img + '" data-title="' + c.name + '" data-credit="' + c.dp + '">' +
-            '<span class="car__tag">' + c.tag + '</span>' +
             '<div class="car__img"><img src="' + c.img + '" alt="' + c.name + '" loading="lazy"></div>' +
           '</button>' +
           '<div class="car__info">' +
-            '<div>' +
+            '<div class="car__head">' +
               '<h3>' + c.name + '</h3>' +
-              '<p class="car__spec">' + c.meta + ' &bull; ' + c.km + '</p>' +
-              '<span class="car__credit-hint">' + c.dp + '</span>' +
+              '<p class="car__spec">' + c.meta + '</p>' +
             '</div>' +
-            '<div class="car__price">' +
-              '<strong>' + c.price + '</strong>' +
-              '<div class="car__actions">' +
-                '<button type="button" class="car__quick-view js-lb" data-src="' + c.img + '" data-title="' + c.name + '" data-credit="' + c.dp + '">Detail</button>' +
-                '<a href="' + waUrl(c.name) + '" target="_blank" rel="noopener">Tanya WA &rarr;</a>' +
+            '<div class="car__notes">' +
+              '<span class="car__label">Keterangan</span>' +
+              '<ul class="car__bullets">' +
+                '<li>Kondisi bersih rapi interior eksterior</li>' +
+                '<li>' + c.km + ' on going</li>' +
+                '<li>Surat lengkap, taat pajak</li>' +
+                '<li>Mesin sehat, kaki senyap</li>' +
+              '</ul>' +
+            '</div>' +
+            '<div class="car__deal">' +
+              '<div class="car__deal-item">' +
+                '<span class="car__label">Kredit</span>' +
+                '<strong class="car__kredit-val">' + kredit + '</strong>' +
               '</div>' +
+              '<div class="car__deal-item">' +
+                '<span class="car__label">Harga</span>' +
+                '<strong class="car__price-val">' + c.price + '</strong>' +
+              '</div>' +
+            '</div>' +
+            '<div class="car__actions">' +
+              '<button type="button" class="car__quick-view js-lb" data-src="' + c.img + '" data-title="' + c.name + '" data-credit="' + c.dp + '">Lihat Poster</button>' +
+              '<a href="' + waUrl(c.name) + '" target="_blank" rel="noopener">Tanya WA &rarr;</a>' +
             '</div>' +
           '</div>' +
         '</article>'
@@ -70,23 +161,22 @@
   }
   renderStock();
 
-  document.querySelectorAll('[data-filter]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      document.querySelectorAll('[data-filter]').forEach(function (b) { b.classList.remove('is-active'); });
-      btn.classList.add('is-active');
-      currentCat = btn.getAttribute('data-filter');
-      renderStock();
-    });
+  [fSearch, fBrand, fPrice, fYear, fTrans, fType].forEach(function (el) {
+    if (!el) return;
+    el.addEventListener(el.tagName === 'INPUT' ? 'input' : 'change', renderStock);
   });
 
-  document.querySelectorAll('[data-trans]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      document.querySelectorAll('[data-trans]').forEach(function (b) { b.classList.remove('is-active'); });
-      btn.classList.add('is-active');
-      currentTrans = btn.getAttribute('data-trans');
+  if (fReset) {
+    fReset.addEventListener('click', function () {
+      if (fSearch) fSearch.value = '';
+      if (fBrand) fBrand.value = 'all';
+      if (fPrice) fPrice.value = 'all';
+      if (fYear) fYear.value = 'all';
+      if (fTrans) fTrans.value = 'all';
+      if (fType) fType.value = 'all';
       renderStock();
     });
-  });
+  }
 
   // ---------- Render Serah Terima (27 foto) ----------
   var handoverGrid = document.getElementById('handoverGrid');
@@ -186,7 +276,14 @@
         var el = document.querySelector(id);
         if (!el) return;
         e.preventDefault();
-        lenis.scrollTo(el, { offset: 0 });
+        nav.classList.add('is-hidden');
+        lenis.scrollTo(el, {
+          offset: 0,
+          onComplete: function () {
+            lastY = window.scrollY || window.pageYOffset;
+            nav.classList.remove('is-hidden');
+          }
+        });
       });
     });
   }
