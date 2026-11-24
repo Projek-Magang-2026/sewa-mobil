@@ -1953,15 +1953,15 @@ address {
   .hero__seam-fade {
     inset: 0;
     background: linear-gradient(to top,
-        rgba(12, 14, 18, 0.86) 0%,
-        rgba(12, 14, 18, 0.62) 55%,
-        rgba(12, 14, 18, 0.34) 100%);
+        rgba(12, 14, 18, 0.9) 0%,
+        rgba(12, 14, 18, 0.68) 55%,
+        rgba(12, 14, 18, 0.45) 100%);
   }
 
   .hero__container {
-    align-items: flex-end;
-    padding-top: 120px;
-    padding-bottom: 28px;
+    align-items: center;
+    padding-top: 92px;
+    padding-bottom: 24px;
   }
 
   .stock-grid {
@@ -1990,8 +1990,22 @@ address {
 }
 
 @media (max-width: 560px) {
+  .hero__container {
+    padding-top: 84px;
+    padding-bottom: 20px;
+  }
+
+  .hero__loc-badge {
+    font-size: 11px;
+    padding: 6px 12px;
+    margin-bottom: 14px;
+    border-radius: 10px;
+    max-width: 100%;
+    line-height: 1.4;
+  }
+
   .hero__title {
-    font-size: clamp(2rem, 8.8vw, 2.6rem);
+    font-size: clamp(1.95rem, 8.6vw, 2.5rem);
   }
 
   .hero__desc {
@@ -2000,23 +2014,34 @@ address {
   }
 
   .hero__actions {
-    margin-top: 18px;
+    margin-top: 20px;
     width: 100%;
+    flex-direction: column;
+    align-items: stretch;
     gap: 10px;
   }
 
   .hero-btn {
-    flex: 1;
-    padding: 12px 14px;
-    font-size: 12.5px;
+    width: 100%;
+    padding: 13px 16px;
+    font-size: 13.5px;
   }
 
   .hero__partners-inner {
-    gap: 8px 16px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    gap: 8px 12px;
+  }
+
+  .hero__partners-label {
+    font-size: 10px;
   }
 
   .hero__partners-list {
-    gap: 8px 14px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 12px;
+    width: 100%;
   }
 
   .hp-item {
