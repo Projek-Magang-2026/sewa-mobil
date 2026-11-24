@@ -2,14 +2,66 @@
   'use strict';
 
   var WA_NUMBER = '6281234567890';
-
   var STOCK = window.GARASI_STOCK || [];
+  var TYPE_LABELS = { suv: 'SUV', mpv: 'MPV', hatchback: 'Hatchback' };
 
   function waUrl(title) {
     return 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent('Halo Garasi 05, saya tertarik dengan ' + title);
   }
 
-  // ---------- Render Ready Stock & Filter Lengkap ----------
+  function yearOf(meta) {
+    var m = (meta || '').match(/\b(19\d\d|20\d\d)\b/);
+    return m ? parseInt(m[1], 10) : 0;
+  }
+
+  function approxPriceOf(p) {
+    var m = (p || '').match(/(\d+)/);
+    return m ? parseInt(m[1], 10) : 0;
+  }
+
+  // ---------- Card HTML Builder (Bersih tanpa kotak DP rame) ----------
+  function buildCarCard(c) {
+    var yr = yearOf(c.meta) || '-';
+    var trLabel = c.trans === 'matic' ? 'Matic' : 'Manual';
+    var catLabel = TYPE_LABELS[c.type] || c.type.toUpperCase();
+    var kmClean = (c.km || '').replace(/^KM\s*/i, '');
+
+    return (
+      '<article class="car">' +
+        '<div class="car__media-wrap">' +
+          '<button type="button" class="car__media js-lb" data-src="' + c.img + '" data-title="' + c.name + '" data-credit="' + c.dp + '">' +
+            '<div class="car__img"><img src="' + c.img + '" alt="' + c.name + '" loading="lazy"></div>' +
+          '</button>' +
+          '<button type="button" class="car__poster-btn js-lb" data-src="' + c.img + '" data-title="' + c.name + '" data-credit="' + c.dp + '" title="Lihat Poster Lengkap" aria-label="Lihat Poster Lengkap">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>' +
+          '</button>' +
+        '</div>' +
+        '<div class="car__body">' +
+          '<h3 class="car__title">' + c.name + '</h3>' +
+          '<div class="car__specs-row">' +
+            '<div class="car__spec-cell"><strong>' + yr + '</strong><span>Tahun</span></div>' +
+            '<div class="car__spec-cell"><strong>' + trLabel + '</strong><span>Transmisi</span></div>' +
+            '<div class="car__spec-cell"><strong>' + catLabel + '</strong><span>Kategori</span></div>' +
+            '<div class="car__spec-cell"><strong>' + kmClean + '</strong><span>Kilometer</span></div>' +
+          '</div>' +
+          '<div class="car__footer">' +
+            '<div class="car__price-wrap">' +
+              '<strong class="car__price-val">' + c.price + '</strong>' +
+            '</div>' +
+            '<button type="button" class="btn-card-red js-lb" data-src="' + c.img + '" data-title="' + c.name + '" data-credit="' + c.dp + '">Detail <span>&rarr;</span></button>' +
+          '</div>' +
+        '</div>' +
+      '</article>'
+    );
+  }
+
+  // ---------- 1. Beranda: Tampilkan 3 Unit Pilihan Saja ----------
+  var homeStockGrid = document.getElementById('homeStockGrid');
+  if (homeStockGrid) {
+    homeStockGrid.innerHTML = STOCK.slice(0, 3).map(buildCarCard).join('');
+  }
+
+  // ---------- 2. Halaman Katalog: Semua 13 Unit + Search & Filter ----------
   var stockGrid = document.getElementById('stockGrid');
   var fSearch = document.getElementById('fSearch');
   var fBrand = document.getElementById('fBrand');
@@ -39,143 +91,101 @@
     return 'Lainnya';
   }
 
-  function yearOf(meta) {
-    var m = (meta || '').match(/\b(19\d\d|20\d\d)\b/);
-    return m ? parseInt(m[1], 10) : 0;
-  }
-
-  function approxPriceOf(p) {
-    var m = (p || '').match(/(\d+)/);
-    return m ? parseInt(m[1], 10) : 0;
-  }
-
-  // Isi dropdown filter
-  if (fBrand) {
-    BRANDS.forEach(function (b) {
-      var opt = document.createElement('option');
-      opt.value = b;
-      opt.textContent = b;
-      fBrand.appendChild(opt);
-    });
-  }
-  if (fPrice) {
-    PRICE_RANGES.forEach(function (r) {
-      var opt = document.createElement('option');
-      opt.value = r.v;
-      opt.textContent = r.label;
-      fPrice.appendChild(opt);
-    });
-  }
-  if (fYear) {
-    var years = [];
-    STOCK.forEach(function (c) {
-      var y = yearOf(c.meta);
-      if (y && years.indexOf(y) === -1) years.push(y);
-    });
-    years.sort(function (a, b) { return b - a; });
-    years.forEach(function (y) {
-      var opt = document.createElement('option');
-      opt.value = String(y);
-      opt.textContent = String(y);
-      fYear.appendChild(opt);
-    });
-  }
-
-  function renderStock() {
-    if (!stockGrid) return;
-
-    var q = (fSearch ? fSearch.value : '').trim().toLowerCase();
-    var selBrand = fBrand ? fBrand.value : 'all';
-    var selPrice = fPrice ? fPrice.value : 'all';
-    var selYear = fYear ? fYear.value : 'all';
-    var selTrans = fTrans ? fTrans.value : 'all';
-    var selType = fType ? fType.value : 'all';
-
-    var items = STOCK.filter(function (c) {
-      if (q) {
-        var hay = (c.name + ' ' + (c.meta || '') + ' ' + brandOf(c.name)).toLowerCase();
-        if (hay.indexOf(q) === -1) return false;
-      }
-      if (selBrand !== 'all' && brandOf(c.name) !== selBrand) return false;
-      if (selType !== 'all' && c.type !== selType) return false;
-      if (selTrans !== 'all' && c.trans !== selTrans) return false;
-      if (selYear !== 'all' && String(yearOf(c.meta)) !== selYear) return false;
-      if (selPrice !== 'all') {
-        var num = approxPriceOf(c.price);
-        var rule = null;
-        for (var i = 0; i < PRICE_RANGES.length; i++) {
-          if (PRICE_RANGES[i].v === selPrice) { rule = PRICE_RANGES[i]; break; }
-        }
-        if (rule && !rule.test(num)) return false;
-      }
-      return true;
-    });
-
-    if (heroCount) heroCount.textContent = items.length;
-
-    if (items.length === 0) {
-      stockGrid.innerHTML = '<p class="stock-empty">Tidak ada unit yang sesuai dengan kombinasi pencarian dan filter tersebut.</p>';
-      return;
+  if (stockGrid) {
+    if (fBrand) {
+      BRANDS.forEach(function (b) {
+        var opt = document.createElement('option');
+        opt.value = b;
+        opt.textContent = b;
+        fBrand.appendChild(opt);
+      });
+    }
+    if (fPrice) {
+      PRICE_RANGES.forEach(function (r) {
+        var opt = document.createElement('option');
+        opt.value = r.v;
+        opt.textContent = r.label;
+        fPrice.appendChild(opt);
+      });
+    }
+    if (fYear) {
+      var years = [];
+      STOCK.forEach(function (c) {
+        var y = yearOf(c.meta);
+        if (y && years.indexOf(y) === -1) years.push(y);
+      });
+      years.sort(function (a, b) { return b - a; });
+      years.forEach(function (y) {
+        var opt = document.createElement('option');
+        opt.value = String(y);
+        opt.textContent = String(y);
+        fYear.appendChild(opt);
+      });
     }
 
-    stockGrid.innerHTML = items.map(function (c) {
-      var kredit = c.dp.replace(' · ', ' / ');
-      return (
-        '<article class="car">' +
-          '<button type="button" class="car__media js-lb" data-src="' + c.img + '" data-title="' + c.name + '" data-credit="' + c.dp + '">' +
-            '<div class="car__img"><img src="' + c.img + '" alt="' + c.name + '" loading="lazy"></div>' +
-          '</button>' +
-          '<div class="car__info">' +
-            '<div class="car__head">' +
-              '<h3>' + c.name + '</h3>' +
-              '<p class="car__spec">' + c.meta + '</p>' +
-            '</div>' +
-            '<div class="car__notes">' +
-              '<span class="car__label">Keterangan</span>' +
-              '<ul class="car__bullets">' +
-                '<li>Kondisi bersih rapi interior eksterior</li>' +
-                '<li>' + c.km + ' on going</li>' +
-                '<li>Surat lengkap, taat pajak</li>' +
-                '<li>Mesin sehat, kaki senyap</li>' +
-              '</ul>' +
-            '</div>' +
-            '<div class="car__deal">' +
-              '<div class="car__deal-item">' +
-                '<span class="car__label">Kredit</span>' +
-                '<strong class="car__kredit-val">' + kredit + '</strong>' +
-              '</div>' +
-              '<div class="car__deal-item">' +
-                '<span class="car__label">Harga</span>' +
-                '<strong class="car__price-val">' + c.price + '</strong>' +
-              '</div>' +
-            '</div>' +
-            '<div class="car__actions">' +
-              '<button type="button" class="car__quick-view js-lb" data-src="' + c.img + '" data-title="' + c.name + '" data-credit="' + c.dp + '">Lihat Poster</button>' +
-              '<a href="' + waUrl(c.name) + '" target="_blank" rel="noopener">Tanya WA &rarr;</a>' +
-            '</div>' +
-          '</div>' +
-        '</article>'
-      );
-    }).join('');
-    if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
-  }
-  renderStock();
+    // Baca query ?type=suv / mpv / hatchback dari URL jika ada
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var urlType = params.get('type');
+      if (urlType && fType) fType.value = urlType;
+    } catch (err) {}
 
-  [fSearch, fBrand, fPrice, fYear, fTrans, fType].forEach(function (el) {
-    if (!el) return;
-    el.addEventListener(el.tagName === 'INPUT' ? 'input' : 'change', renderStock);
-  });
+    function renderStock() {
+      var q = (fSearch ? fSearch.value : '').trim().toLowerCase();
+      var selBrand = fBrand ? fBrand.value : 'all';
+      var selPrice = fPrice ? fPrice.value : 'all';
+      var selYear = fYear ? fYear.value : 'all';
+      var selTrans = fTrans ? fTrans.value : 'all';
+      var selType = fType ? fType.value : 'all';
 
-  if (fReset) {
-    fReset.addEventListener('click', function () {
-      if (fSearch) fSearch.value = '';
-      if (fBrand) fBrand.value = 'all';
-      if (fPrice) fPrice.value = 'all';
-      if (fYear) fYear.value = 'all';
-      if (fTrans) fTrans.value = 'all';
-      if (fType) fType.value = 'all';
-      renderStock();
+      var items = STOCK.filter(function (c) {
+        if (q) {
+          var hay = (c.name + ' ' + (c.meta || '') + ' ' + brandOf(c.name)).toLowerCase();
+          if (hay.indexOf(q) === -1) return false;
+        }
+        if (selBrand !== 'all' && brandOf(c.name) !== selBrand) return false;
+        if (selType !== 'all' && c.type !== selType) return false;
+        if (selTrans !== 'all' && c.trans !== selTrans) return false;
+        if (selYear !== 'all' && String(yearOf(c.meta)) !== selYear) return false;
+        if (selPrice !== 'all') {
+          var num = approxPriceOf(c.price);
+          var rule = null;
+          for (var i = 0; i < PRICE_RANGES.length; i++) {
+            if (PRICE_RANGES[i].v === selPrice) { rule = PRICE_RANGES[i]; break; }
+          }
+          if (rule && !rule.test(num)) return false;
+        }
+        return true;
+      });
+
+      if (heroCount) heroCount.textContent = items.length;
+
+      if (items.length === 0) {
+        stockGrid.innerHTML = '<p class="stock-empty">Tidak ada unit yang sesuai dengan pencarian dan filter Anda.</p>';
+        return;
+      }
+
+      stockGrid.innerHTML = items.map(buildCarCard).join('');
+      if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+    }
+    renderStock();
+
+    [fSearch, fBrand, fPrice, fYear, fTrans, fType].forEach(function (el) {
+      if (!el) return;
+      el.addEventListener(el.tagName === 'INPUT' ? 'input' : 'change', renderStock);
     });
+
+    if (fReset) {
+      fReset.addEventListener('click', function () {
+        if (fSearch) fSearch.value = '';
+        if (fBrand) fBrand.value = 'all';
+        if (fPrice) fPrice.value = 'all';
+        if (fYear) fYear.value = 'all';
+        if (fTrans) fTrans.value = 'all';
+        if (fType) fType.value = 'all';
+        renderStock();
+      });
+    }
   }
 
   // ---------- Render Serah Terima (27 foto) ----------
@@ -204,18 +214,40 @@
       handoverGrid.querySelectorAll('.handover__item').forEach(function (el, idx) {
         if (idx >= INITIAL) el.classList.toggle('is-hidden', !expanded);
       });
-      toggleHandover.innerHTML = (expanded ? 'Tampilkan lebih sedikit ' : 'Lihat semua serah terima (' + TOTAL + ') ') + '<i></i>';
+      var labelSpan = toggleHandover.querySelector('span');
+      if (labelSpan) {
+        labelSpan.textContent = expanded ? 'Tampilkan lebih sedikit' : 'Lihat semua serah terima (' + TOTAL + ')';
+      }
       if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
     });
   }
 
-  // ---------- Minimalist Lightbox ----------
+  // ---------- Interactive FAQ Accordion ----------
+  document.querySelectorAll('.faq-item__btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var item = btn.closest('.faq-item');
+      var isOpen = item.classList.contains('is-open');
+      document.querySelectorAll('.faq-item').forEach(function (other) {
+        other.classList.remove('is-open');
+        var b = other.querySelector('.faq-item__btn');
+        if (b) b.setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        item.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+      if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+    });
+  });
+
+  // ---------- Lightbox ----------
   var lb = document.getElementById('lb');
   var lbImg = document.getElementById('lbImg');
   var lbTitle = document.getElementById('lbTitle');
   var lbWa = document.getElementById('lbWa');
 
   function closeLb() {
+    if (!lb) return;
     lb.classList.remove('is-open');
     lb.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
@@ -223,7 +255,7 @@
 
   document.addEventListener('click', function (e) {
     var t = e.target.closest('.js-lb');
-    if (t) {
+    if (t && lb) {
       lbImg.src = t.getAttribute('data-src');
       lbImg.alt = t.getAttribute('data-title') || '';
       var title = t.getAttribute('data-title') || '';
@@ -242,29 +274,20 @@
     if (e.key === 'Escape' && lb && lb.classList.contains('is-open')) closeLb();
   });
 
-  // ---------- Floating WhatsApp Scroll Trigger ----------
-  var floatWa = document.querySelector('.float-wa');
-  if (floatWa) {
-    window.addEventListener('scroll', function () {
-      var y = window.scrollY || window.pageYOffset;
-      if (y > 320) {
-        floatWa.classList.add('is-visible');
-      } else {
-        floatWa.classList.remove('is-visible');
-      }
-    }, { passive: true });
-  }
-
-  // ---------- GSAP + Lenis (Persis gaya halus sebelumnya) ----------
+  // ---------- GSAP + Lenis ----------
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var hasGsap = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
   if (!hasGsap) return;
 
   gsap.registerPlugin(ScrollTrigger);
 
+  var nav = document.getElementById('nav');
+  var isCatalogPage = document.querySelector('.page-catalog') !== null;
+  var lastY = 0;
+
   var lenis = null;
   if (!reduce && typeof Lenis !== 'undefined') {
-    lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+    lenis = new Lenis({ duration: 1.05, smoothWheel: true });
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
     gsap.ticker.lagSmoothing(0);
@@ -276,123 +299,62 @@
         var el = document.querySelector(id);
         if (!el) return;
         e.preventDefault();
-        nav.classList.add('is-hidden');
+        if (nav) nav.classList.add('is-hidden');
         lenis.scrollTo(el, {
-          offset: 0,
+          offset: -20,
           onComplete: function () {
             lastY = window.scrollY || window.pageYOffset;
-            nav.classList.remove('is-hidden');
+            if (nav) nav.classList.remove('is-hidden');
           }
         });
       });
     });
   }
 
-  var nav = document.getElementById('nav');
-  var lastY = 0;
-  ScrollTrigger.create({
-    start: 0,
-    end: 'max',
-    onUpdate: function (self) {
-      var y = self.scroll();
-      nav.classList.toggle('is-solid', y > window.innerHeight * 0.6);
-      nav.classList.toggle('is-hidden', y > lastY && y > window.innerHeight * 0.9);
-      lastY = y;
-    }
-  });
+  if (nav) {
+    ScrollTrigger.create({
+      start: 0,
+      end: 'max',
+      onUpdate: function (self) {
+        var y = self.scroll();
+        if (!isCatalogPage) {
+          nav.classList.toggle('is-solid', y > window.innerHeight * 0.5);
+        }
+        nav.classList.toggle('is-hidden', y > lastY && y > 320);
+        lastY = y;
+      }
+    });
+  }
 
   if (reduce) return;
 
-  document.querySelectorAll('[data-split]').forEach(function (el) {
-    var parts = el.innerHTML.split(/<br\s*\/?>/i);
-    el.innerHTML = parts.map(function (p) {
-      return '<span class="line"><span class="line__inner">' + p.trim() + '</span></span>';
-    }).join('');
-  });
+  if (document.querySelector('.hero__media-panel')) {
+    var heroVideo = document.querySelector('.hero__video');
+    if (heroVideo) {
+      heroVideo.muted = true;
+      var p = heroVideo.play();
+      if (p && typeof p.catch === 'function') {
+        p.catch(function () {});
+      }
+    }
 
-  var heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-  heroTl
-    .from('.hero__media', { clipPath: 'inset(0 0 100% 0)', duration: 1.5, ease: 'power3.inOut' }, 0)
-    .from('.hero__media img', { scale: 1.12, duration: 2.2, ease: 'power2.out' }, 0)
-    .from('.hero .eyebrow', { opacity: 0, y: 16, duration: 0.9 }, 0.35)
-    .from('.hero__title .line__inner', { yPercent: 110, duration: 1.2, stagger: 0.14 }, 0.45)
-    .from('.hero__meta', { opacity: 0, y: 20, duration: 1 }, 1.0)
-    .from('.hero__scroll', { opacity: 0, duration: 1 }, 1.3)
-    .from('.nav', { opacity: 0, duration: 1, clearProps: 'opacity' }, 0.75);
-
-  document.querySelectorAll('[data-split]').forEach(function (el) {
-    if (el.closest('.hero')) return;
-    gsap.from(el.querySelectorAll('.line__inner'), {
-      yPercent: 110,
-      duration: 1.1,
-      ease: 'power3.out',
-      stagger: 0.12,
-      scrollTrigger: { trigger: el, start: 'top 85%', once: true }
-    });
-  });
+    var heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    heroTl
+      .from('.hero__media-panel', { opacity: 0, scale: 1.04, duration: 1.1 }, 0)
+      .from('.hero__title', { opacity: 0, y: 24, duration: 0.85 }, 0.2)
+      .from('.hero__desc', { opacity: 0, y: 16, duration: 0.75 }, 0.4)
+      .from('.hero__actions', { opacity: 0, y: 14, duration: 0.75 }, 0.55)
+      .from('.hero__partners', { opacity: 0, y: 12, duration: 0.75 }, 0.7);
+  }
 
   gsap.utils.toArray('[data-fade]').forEach(function (el) {
     gsap.from(el, {
-      opacity: 0, y: 24, duration: 1, ease: 'power2.out',
+      opacity: 0,
+      y: 22,
+      duration: 0.85,
+      ease: 'power2.out',
       scrollTrigger: { trigger: el, start: 'top 88%', once: true }
     });
-  });
-
-  gsap.utils.toArray('[data-reveal]').forEach(function (el) {
-    gsap.from(el, {
-      opacity: 0, y: 44, duration: 1.05, ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 88%', once: true }
-    });
-  });
-
-  gsap.utils.toArray('[data-mask]').forEach(function (el) {
-    gsap.fromTo(el,
-      { clipPath: 'inset(0 0 100% 0)' },
-      {
-        clipPath: 'inset(0 0 0% 0)', duration: 1.35, ease: 'power3.inOut',
-        scrollTrigger: { trigger: el, start: 'top 88%', once: true }
-      }
-    );
-  });
-
-  gsap.utils.toArray('[data-parallax]').forEach(function (el) {
-    var amt = parseFloat(el.getAttribute('data-parallax')) || 0.08;
-    var host = el.closest('section') || el.parentElement;
-    var isHero = el.classList.contains('hero__media');
-    gsap.fromTo(el,
-      { yPercent: isHero ? 0 : -amt * 100 },
-      {
-        yPercent: amt * 100,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: isHero ? host : el.parentElement,
-          start: isHero ? 'top top' : 'top bottom',
-          end: isHero ? 'bottom top' : 'bottom top',
-          scrub: true
-        }
-      }
-    );
-  });
-
-  gsap.utils.toArray('[data-scale]').forEach(function (el) {
-    gsap.fromTo(el,
-      { scale: 1.08 },
-      {
-        scale: 1, ease: 'none',
-        scrollTrigger: { trigger: el.parentElement, start: 'top 90%', end: 'center center', scrub: true }
-      }
-    );
-  });
-
-  gsap.utils.toArray('[data-hshift]').forEach(function (el) {
-    var dist = parseFloat(el.getAttribute('data-hshift')) || -60;
-    gsap.fromTo(el,
-      { x: -dist },
-      {
-        x: dist, ease: 'none',
-        scrollTrigger: { trigger: el.closest('.showcase__stage'), start: 'top bottom', end: 'bottom top', scrub: true }
-      }
-    );
   });
 
   window.addEventListener('load', function () { ScrollTrigger.refresh(); });
