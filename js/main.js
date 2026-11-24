@@ -240,6 +240,142 @@
     });
   });
 
+  // ---------- Halaman Artikel & Single Post ----------
+  var ARTICLES = window.GARASI_ARTICLES || [];
+  var articleGrid = document.getElementById('articleGrid');
+  var featuredArticle = document.getElementById('featuredArticle');
+  var articleSearch = document.getElementById('articleSearch');
+  var articleCats = document.getElementById('articleCats');
+
+  function buildArticleCard(a) {
+    var href = 'artikel-detail.html?slug=' + encodeURIComponent(a.slug);
+    return (
+      '<article class="car article-card">' +
+        '<a href="' + href + '" class="car__media-wrap">' +
+          '<div class="car__img"><img src="' + a.img + '" alt="' + a.title + '" width="640" height="440" loading="lazy"></div>' +
+        '</a>' +
+        '<div class="car__body">' +
+          '<div class="article-meta">' +
+            '<span class="article-cat">' + a.category + '</span>' +
+            '<span>' + a.date + ' &bull; ' + a.readTime + '</span>' +
+          '</div>' +
+          '<h3 class="car__title article-title"><a href="' + href + '">' + a.title + '</a></h3>' +
+          '<p class="article-excerpt">' + a.excerpt + '</p>' +
+          '<div class="car__footer">' +
+            '<span class="article-author">' + a.author + '</span>' +
+            '<a href="' + href + '" class="btn-card-red">Baca <span>&rarr;</span></a>' +
+          '</div>' +
+        '</div>' +
+      '</article>'
+    );
+  }
+
+  if (articleGrid && ARTICLES.length) {
+    var activeCat = 'all';
+    var renderArticles = function () {
+      var q = articleSearch ? articleSearch.value.trim().toLowerCase() : '';
+      var list = ARTICLES.filter(function (a) {
+        if (activeCat !== 'all' && a.category !== activeCat) return false;
+        if (q && (a.title + ' ' + a.category + ' ' + a.excerpt).toLowerCase().indexOf(q) === -1) return false;
+        return true;
+      });
+
+      if (featuredArticle) {
+        if (activeCat === 'all' && !q && list.length) {
+          var f = list[0];
+          var fHref = 'artikel-detail.html?slug=' + encodeURIComponent(f.slug);
+          featuredArticle.innerHTML =
+            '<article class="featured-post">' +
+              '<a href="' + fHref + '" class="featured-post__media">' +
+                '<img src="' + f.img + '" alt="' + f.title + '" width="800" height="520">' +
+              '</a>' +
+              '<div class="featured-post__body">' +
+                '<div class="article-meta">' +
+                  '<span class="article-cat">' + f.category + '</span>' +
+                  '<span>' + f.date + ' &bull; ' + f.readTime + '</span>' +
+                '</div>' +
+                '<h2><a href="' + fHref + '">' + f.title + '</a></h2>' +
+                '<p>' + f.excerpt + '</p>' +
+                '<a href="' + fHref + '" class="btn-primary-red"><span>Baca Selengkapnya</span><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h12m0 0-4-4m4 4-4 4"/></svg></a>' +
+              '</div>' +
+            '</article>';
+          list = list.slice(1);
+        } else {
+          featuredArticle.innerHTML = '';
+        }
+      }
+
+      if (!list.length && (!featuredArticle || !featuredArticle.innerHTML)) {
+        articleGrid.innerHTML = '<div class="stock-empty">Tidak ada artikel yang cocok dengan pencarian Anda.</div>';
+      } else {
+        articleGrid.innerHTML = list.map(buildArticleCard).join('');
+      }
+    };
+
+    if (articleCats) {
+      articleCats.addEventListener('click', function (e) {
+        var btn = e.target.closest('.cat-pill');
+        if (!btn) return;
+        articleCats.querySelectorAll('.cat-pill').forEach(function (b) { b.classList.remove('is-active'); });
+        btn.classList.add('is-active');
+        activeCat = btn.getAttribute('data-cat') || 'all';
+        renderArticles();
+      });
+    }
+    if (articleSearch) articleSearch.addEventListener('input', renderArticles);
+    renderArticles();
+  }
+
+  // ---------- Single Post Detail ----------
+  var singlePost = document.getElementById('singlePost');
+  if (singlePost && ARTICLES.length) {
+    var sp = new URLSearchParams(window.location.search);
+    var slug = sp.get('slug');
+    var post = ARTICLES.find(function (a) { return a.slug === slug; }) || ARTICLES[0];
+    document.title = post.title + ' — Garasi 05';
+
+    var crumbTitle = document.getElementById('crumbTitle');
+    if (crumbTitle) crumbTitle.textContent = post.title;
+
+    var bodyHtml = (post.content || []).map(function (blk) {
+      if (blk.type === 'h2') return '<h2>' + blk.text + '</h2>';
+      if (blk.type === 'ul') return '<ul>' + blk.items.map(function (it) { return '<li>' + it + '</li>'; }).join('') + '</ul>';
+      if (blk.type === 'tip') return '<div class="post-tip"><strong>Tips Garasi 05:</strong> ' + blk.text + '</div>';
+      return '<p>' + blk.text + '</p>';
+    }).join('');
+
+    singlePost.innerHTML =
+      '<div class="post-header">' +
+        '<div class="article-meta">' +
+          '<span class="article-cat">' + post.category + '</span>' +
+          '<span>' + post.date + ' &bull; ' + post.readTime + '</span>' +
+        '</div>' +
+        '<h1 class="post-title">' + post.title + '</h1>' +
+        '<p class="post-author">Ditulis oleh <strong>' + post.author + '</strong></p>' +
+      '</div>' +
+      '<div class="post-cover"><img src="' + post.img + '" alt="' + post.title + '" width="960" height="540"></div>' +
+      '<div class="post-body">' + bodyHtml + '</div>' +
+      '<div class="post-footer-cta">' +
+        '<div><strong>Butuh bantuan lebih lanjut?</strong><span>Tanyakan unit atau simulasi kredit langsung ke tim kami.</span></div>' +
+        '<a href="' + waUrl(post.title) + '" target="_blank" rel="noopener" class="btn-primary-red"><span>Tanya via WhatsApp</span><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h12m0 0-4-4m4 4-4 4"/></svg></a>' +
+      '</div>';
+
+    var others = ARTICLES.filter(function (a) { return a.slug !== post.slug; });
+    var sidebarArticles = document.getElementById('sidebarArticles');
+    if (sidebarArticles) {
+      sidebarArticles.innerHTML = others.slice(0, 4).map(function (a) {
+        return '<a href="artikel-detail.html?slug=' + encodeURIComponent(a.slug) + '" class="post-side-item">' +
+          '<img src="' + a.img + '" alt="' + a.title + '" width="88" height="64" loading="lazy">' +
+          '<div><span>' + a.category + '</span><strong>' + a.title + '</strong></div>' +
+        '</a>';
+      }).join('');
+    }
+    var relatedArticles = document.getElementById('relatedArticles');
+    if (relatedArticles) {
+      relatedArticles.innerHTML = others.slice(0, 3).map(buildArticleCard).join('');
+    }
+  }
+
   // ---------- Lightbox ----------
   var lb = document.getElementById('lb');
   var lbImg = document.getElementById('lbImg');
