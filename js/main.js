@@ -30,7 +30,7 @@
       '<article class="car">' +
         '<div class="car__media-wrap">' +
           '<button type="button" class="car__media js-lb" data-src="' + c.img + '" data-title="' + c.name + '" data-credit="' + c.dp + '">' +
-            '<div class="car__img"><img src="' + c.img + '" alt="' + c.name + '" loading="lazy"></div>' +
+            '<div class="car__img"><img src="' + c.img + '" alt="' + c.name + '" width="640" height="440" loading="lazy"></div>' +
           '</button>' +
           '<button type="button" class="car__poster-btn js-lb" data-src="' + c.img + '" data-title="' + c.name + '" data-credit="' + c.dp + '" title="Lihat Poster Lengkap" aria-label="Lihat Poster Lengkap">' +
             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>' +
@@ -202,7 +202,7 @@
       var src = 'assets/img/serah-terima/serah-terima-' + n + '.webp';
       out +=
         '<button type="button" class="handover__item js-lb' + (i > INITIAL ? ' is-hidden' : '') + '" data-src="' + src + '" data-title="Serah Terima Garasi 05 #' + n + '">' +
-          '<img src="' + src + '" alt="Serah terima unit Garasi 05 #' + n + '" loading="lazy">' +
+          '<img src="' + src + '" alt="Serah terima unit Garasi 05 #' + n + '" width="540" height="675" loading="lazy">' +
         '</button>';
     }
     handoverGrid.innerHTML = out;
@@ -340,11 +340,26 @@
 
     var heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
     heroTl
-      .from('.hero__media-panel', { opacity: 0, scale: 1.04, duration: 1.1 }, 0)
-      .from('.hero__title', { opacity: 0, y: 24, duration: 0.85 }, 0.2)
-      .from('.hero__desc', { opacity: 0, y: 16, duration: 0.75 }, 0.4)
-      .from('.hero__actions', { opacity: 0, y: 14, duration: 0.75 }, 0.55)
-      .from('.hero__partners', { opacity: 0, y: 12, duration: 0.75 }, 0.7);
+      .from('.hero__desc', { y: 12, duration: 0.65 }, 0.1)
+      .from('.hero__actions', { y: 12, duration: 0.65 }, 0.2);
+  }
+
+  // Lazy-load below-the-fold videos when scrolled near viewport
+  var lazyVideos = document.querySelectorAll('.js-lazy-video');
+  if (lazyVideos.length && 'IntersectionObserver' in window) {
+    var vidObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var v = entry.target;
+          v.muted = true;
+          v.preload = 'auto';
+          var vp = v.play();
+          if (vp && typeof vp.catch === 'function') vp.catch(function () {});
+          vidObserver.unobserve(v);
+        }
+      });
+    }, { rootMargin: '200px 0px' });
+    lazyVideos.forEach(function (v) { vidObserver.observe(v); });
   }
 
   gsap.utils.toArray('[data-fade]').forEach(function (el) {
