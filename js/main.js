@@ -199,7 +199,7 @@
     var out = '';
     for (var i = 1; i <= TOTAL; i++) {
       var n = i < 10 ? '0' + i : '' + i;
-      var src = 'assets/img/serah-terima/serah-terima-' + n + '.jpg';
+      var src = 'assets/img/serah-terima/serah-terima-' + n + '.webp';
       out +=
         '<button type="button" class="handover__item js-lb' + (i > INITIAL ? ' is-hidden' : '') + '" data-src="' + src + '" data-title="Serah Terima Garasi 05 #' + n + '">' +
           '<img src="' + src + '" alt="Serah terima unit Garasi 05 #' + n + '" loading="lazy">' +

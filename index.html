@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=15">
+  <link rel="stylesheet" href="css/style.css?v=18">
 </head>
 
 <body>
@@ -35,7 +35,8 @@
     <!-- 1. SPLIT HERO (KIRI PUTIH TEKS & BTN, KANAN VIDIO MOBIL) -->
     <section class="hero" id="hero">
       <div class="hero__media-panel">
-        <video class="hero__video" autoplay muted loop playsinline preload="auto" poster="assets/img/hero.jpg">
+        <video class="hero__video" autoplay muted loop playsinline preload="auto" poster="assets/img/hero.webp">
+          <source src="assets/img/hero.webm" type="video/webm">
           <source src="assets/img/hero.mp4" type="video/mp4">
         </video>
       </div>
@@ -45,13 +46,7 @@
 
       <div class="container hero__container">
         <div class="hero__left">
-          <div class="hero__loc-badge" aria-label="Area layanan">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-              <circle cx="12" cy="10" r="3"/>
-            </svg>
-            <span>Jember &bull; Banyuwangi &bull; Bondowoso &bull; Probolinggo</span>
-          </div>
+  
 
           <h1 class="hero__title">
             Garasi 05,<br>
@@ -73,7 +68,7 @@
             </a>
             <a href="https://wa.me/6281234567890?text=Halo%20Garasi%2005%2C%20saya%20ingin%20konsultasi%20stok%20mobil%20ready."
               target="_blank" rel="noopener" class="hero-btn hero-btn--outline">
-              <span>Konsultasi WhatsApp</span>
+              <span>Konsultasi</span>
               <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
                 <path d="M6 14 14 6m0 0H7m7 0v7" />
               </svg>
@@ -82,41 +77,69 @@
         </div>
       </div>
 
-      <!-- Strip Mitra Leasing Resmi di bagian bawah Hero -->
+      <!-- Strip Mitra Leasing Resmi (Marquee) di bagian bawah Hero -->
       <div class="hero__partners" aria-label="Mitra pembiayaan resmi">
         <div class="container hero__partners-inner">
           <span class="hero__partners-label">Support Leasing Resmi</span>
-          <div class="hero__partners-list">
-            <span class="hp-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                <path d="m9 12 2 2 4-4" />
-              </svg>
-              Mandiri Utama Finance
-            </span>
-            <span class="hp-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10" />
-                <path d="m9 12 2 2 4-4" />
-              </svg>
-              Adira Finance
-            </span>
-            <span class="hp-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="2" y="5" width="20" height="14" rx="2" />
-                <line x1="2" y1="10" x2="22" y2="10" />
-              </svg>
-              ACC Finance
-            </span>
-            <span class="hp-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M17 1l4 4-4 4" />
-                <path d="M3 11V9a4 4 0 0 1 4-4h14" />
-                <path d="M7 23l-4-4 4-4" />
-                <path d="M21 13v2a4 4 0 0 1-4 4H3" />
-              </svg>
-              Cash &bull; Kredit DP 5 Jt &bull; Trade-In
-            </span>
+          <div class="hero__marquee">
+            <div class="hero__partners-track">
+              <div class="hero__partners-list">
+                <span class="hp-item">
+                  <img class="hp-logo" src="assets/img/logos/muf.svg" alt="Mandiri Utama Finance">
+                </span>
+                <span class="hp-item">
+                  <img class="hp-logo" src="assets/img/logos/adira.webp" alt="Adira Finance">
+                </span>
+                <span class="hp-item">
+                  <img class="hp-logo" src="assets/img/logos/acc.webp" alt="ACC Finance">
+                </span>
+                <span class="hp-item">
+                  <img class="hp-logo" src="assets/img/logos/bca-finance.webp" alt="BCA Finance">
+                </span>
+              </div>
+              <div class="hero__partners-list" aria-hidden="true">
+                <span class="hp-item">
+                  <img class="hp-logo" src="assets/img/logos/muf.svg" alt="">
+                </span>
+                <span class="hp-item">
+                  <img class="hp-logo" src="assets/img/logos/adira.webp" alt="">
+                </span>
+                <span class="hp-item">
+                  <img class="hp-logo" src="assets/img/logos/acc.webp" alt="">
+                </span>
+                <span class="hp-item">
+                  <img class="hp-logo" src="assets/img/logos/bca-finance.webp" alt="BCA Finance">
+                </span>
+              </div>
+              <div class="hero__partners-list" aria-hidden="true">
+                <span class="hp-item">
+                  <img class="hp-logo" src="assets/img/logos/muf.svg" alt="">
+                </span>
+                <span class="hp-item">
+                  <img class="hp-logo" src="assets/img/logos/adira.webp" alt="">
+                </span>
+                <span class="hp-item">
+                  <img class="hp-logo" src="assets/img/logos/acc.webp" alt="">
+                </span>
+                <span class="hp-item">
+                  <img class="hp-logo" src="assets/img/logos/bca-finance.webp" alt="BCA Finance">
+                </span>
+              </div>
+              <div class="hero__partners-list" aria-hidden="true">
+                <span class="hp-item">
+                  <img class="hp-logo" src="assets/img/logos/muf.svg" alt="">
+                </span>
+                <span class="hp-item">
+                  <img class="hp-logo" src="assets/img/logos/adira.webp" alt="">
+                </span>
+                <span class="hp-item">
+                  <img class="hp-logo" src="assets/img/logos/acc.webp" alt="">
+                </span>
+                <span class="hp-item">
+                  <img class="hp-logo" src="assets/img/logos/bca-finance.webp" alt="BCA Finance">
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -285,20 +308,22 @@
           <div class="about-media" data-fade>
             <div class="about-media__main">
               <span class="media-badge">Flagship &bull; Fortuner GR 2.8L 2022</span>
-              <video autoplay muted loop playsinline poster="assets/img/featured-1.jpg">
+              <video autoplay muted loop playsinline poster="assets/img/featured-1.webp">
+                <source src="vid1.webm" type="video/webm">
                 <source src="vid1.mp4" type="video/mp4">
               </video>
             </div>
             <div class="about-media__sub">
               <div class="about-media__card">
                 <span class="media-badge media-badge--sm">Interior Kabin</span>
-                <video autoplay muted loop playsinline poster="assets/img/featured-2.jpg">
+                <video autoplay muted loop playsinline poster="assets/img/featured-2.webp">
+                  <source src="vid2.webm" type="video/webm">
                   <source src="vid2.mp4" type="video/mp4">
                 </video>
               </div>
               <div class="about-media__card">
                 <span class="media-badge media-badge--sm">Tampak Belakang</span>
-                <img src="assets/img/featured-3.jpg" alt="Tampak belakang Toyota Fortuner GR" loading="lazy">
+                <img src="assets/img/featured-3.webp" alt="Tampak belakang Toyota Fortuner GR" loading="lazy">
               </div>
             </div>
           </div>
@@ -428,7 +453,7 @@
     <section class="cta-sec" id="kontak">
       <div class="cta-banner" data-fade>
         <div class="cta-banner__bg">
-          <img src="assets/img/cta.jpg" alt="Honda CR-V Prestige Turbo Garasi 05" loading="lazy">
+          <img src="assets/img/cta.webp" alt="Honda CR-V Prestige Turbo Garasi 05" loading="lazy">
           <div class="cta-banner__shade"></div>
         </div>
         <div class="container">

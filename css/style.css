@@ -448,9 +448,7 @@ address {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 14px 32px;
-  flex-wrap: wrap;
+  gap: 14px 28px;
   padding-top: 12px;
   padding-bottom: 12px;
 }
@@ -464,6 +462,8 @@ address {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .hero__partners-label::before {
@@ -474,11 +474,36 @@ address {
   border-radius: 2px;
 }
 
+.hero__marquee {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 7%, #000 93%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 7%, #000 93%, transparent 100%);
+}
+
+.hero__partners-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: partnerMarquee 28s linear infinite;
+}
+
+.hero__marquee:hover .hero__partners-track {
+  animation-play-state: paused;
+}
+
+@keyframes partnerMarquee {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
 .hero__partners-list {
   display: flex;
   align-items: center;
-  gap: 12px clamp(18px, 3vw, 40px);
-  flex-wrap: wrap;
+  gap: clamp(24px, 3.5vw, 48px);
+  padding-right: clamp(24px, 3.5vw, 48px);
+  flex-shrink: 0;
 }
 
 .hp-item {
@@ -488,12 +513,23 @@ address {
   font-size: 13px;
   font-weight: 700;
   color: var(--ink-2);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .hp-item svg {
   width: 17px;
   height: 17px;
   color: var(--primary);
+  flex-shrink: 0;
+}
+
+.hp-logo {
+  height: 26px;
+  width: auto;
+  max-width: 145px;
+  object-fit: contain;
+  display: block;
   flex-shrink: 0;
 }
 
@@ -2028,24 +2064,23 @@ address {
   }
 
   .hero__partners-inner {
+    flex-direction: column;
+    align-items: flex-start;
     padding-top: 10px;
     padding-bottom: 10px;
-    gap: 8px 12px;
+    gap: 8px;
   }
 
   .hero__partners-label {
     font-size: 10px;
   }
 
-  .hero__partners-list {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px 12px;
+  .hero__marquee {
     width: 100%;
   }
 
   .hp-item {
-    font-size: 11.5px;
+    font-size: 12px;
   }
 
   .filter-selects {
